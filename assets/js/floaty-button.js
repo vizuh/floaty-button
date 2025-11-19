@@ -11,8 +11,10 @@
         document.body.appendChild(container);
     }
 
+    const positionClass = settings.position ? `floaty-position-${settings.position}` : 'floaty-position-bottom_right';
+
     container.innerHTML = `
-        <button class="floaty-button">
+        <button class="floaty-button ${positionClass}">
             ${settings.buttonLabel || 'Book now'}
         </button>
         <div class="floaty-modal-backdrop" hidden></div>

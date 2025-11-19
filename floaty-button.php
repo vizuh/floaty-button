@@ -43,21 +43,37 @@ class Floaty_Button_Plugin {
 			array( 'key' => 'enabled' )
 		);
 
-		add_settings_field(
-			'button_label',
-			'Button Label',
-			array( $this, 'render_text_field' ),
-			'floaty-button-settings',
-			'floaty_button_main_section',
-			array( 'key' => 'button_label', 'default' => 'Book now' )
-		);
+                add_settings_field(
+                        'button_label',
+                        'Button Label',
+                        array( $this, 'render_text_field' ),
+                        'floaty-button-settings',
+                        'floaty_button_main_section',
+                        array( 'key' => 'button_label', 'default' => 'Book now' )
+                );
 
-		add_settings_field(
-			'action_type',
-			'Action Type',
-			array( $this, 'render_select_field' ),
-			'floaty-button-settings',
-			'floaty_button_main_section',
+                add_settings_field(
+                        'position',
+                        'Button Position',
+                        array( $this, 'render_select_field' ),
+                        'floaty-button-settings',
+                        'floaty_button_main_section',
+                        array(
+                                'key' => 'position',
+                                'options' => array(
+                                        'bottom_right' => 'Bottom Right',
+                                        'bottom_left'  => 'Bottom Left'
+                                ),
+                                'default' => 'bottom_right',
+                        )
+                );
+
+                add_settings_field(
+                        'action_type',
+                        'Action Type',
+                        array( $this, 'render_select_field' ),
+                        'floaty-button-settings',
+                        'floaty_button_main_section',
 			array(
 				'key' => 'action_type',
 				'options' => array(
@@ -120,16 +136,33 @@ class Floaty_Button_Plugin {
 	}
 
 	public function sanitize_options( $input ) {
-		$output = array();
+                $output = array();
 
-		$output['enabled']       = ! empty( $input['enabled'] ) ? 1 : 0;
-		$output['button_label']  = sanitize_text_field( $input['button_label'] ?? 'Book now' );
-		$output['action_type']   = in_array( $input['action_type'] ?? 'link', array( 'link', 'iframe_modal' ), true ) ? $input['action_type'] : 'link';
-		$output['link_url']      = esc_url_raw( $input['link_url'] ?? '' );
-		$output['link_target']   = in_array( $input['link_target'] ?? '_blank', array( '_blank', '_self' ), true ) ? $input['link_target'] : '_blank';
-		$output['iframe_url']    = esc_url_raw( $input['iframe_url'] ?? '' );
-		$output['event_name']    = sanitize_key( $input['event_name'] ?? 'floaty_click' );
-		$output['custom_css']    = wp_strip_all_tags( $input['custom_css'] ?? '' );
+                $output['enabled']       = ! empty( $input['enabled'] ) ? 1 : 0;
+                $output['button_label']  = sanitize_text_field( $input['button_label'] ?? 'Book now' );
+                $output['position']      = in_array(
+                        $input['position'] ?? 'bottom_right',
+                        array( 'bottom_right', 'bottom_left' ),
+                        true
+                ) ? $input['position'] : 'bottom_right';
+
+                $output['action_type']   = in_array(
+                        $input['action_type'] ?? 'link',
+                        array( 'link', 'iframe_modal' ),
+                        true
+                ) ? $input['action_type'] : 'link';
+
+                $output['link_url']      = esc_url_raw( $input['link_url'] ?? '' );
+
+                $output['link_target']   = in_array(
+                        $input['link_target'] ?? '_blank',
+                        array( '_blank', '_self' ),
+                        true
+                ) ? $input['link_target'] : '_blank';
+
+                $output['iframe_url']    = esc_url_raw( $input['iframe_url'] ?? '' );
+                $output['event_name']    = sanitize_key( $input['event_name'] ?? 'floaty_click' );
+                $output['custom_css']    = wp_strip_all_tags( $input['custom_css'] ?? '' );
 
 		return $output;
 	}
@@ -218,13 +251,14 @@ class Floaty_Button_Plugin {
 			wp_add_inline_style( 'floaty-button', $options['custom_css'] );
 		}
 
-		$config = array(
-			'buttonLabel'   => $options['button_label'] ?? 'Book now',
-			'actionType'    => $options['action_type'] ?? 'link',
-			'linkUrl'       => $options['link_url'] ?? '',
-			'linkTarget'    => $options['link_target'] ?? '_blank',
-			'iframeUrl'     => $options['iframe_url'] ?? '',
-			'eventName'     => $options['event_name'] ?? 'floaty_click',
+                $config = array(
+                        'buttonLabel'   => $options['button_label'] ?? 'Book now',
+                        'position'      => $options['position'] ?? 'bottom_right',
+                        'actionType'    => $options['action_type'] ?? 'link',
+                        'linkUrl'       => $options['link_url'] ?? '',
+                        'linkTarget'    => $options['link_target'] ?? '_blank',
+                        'iframeUrl'     => $options['iframe_url'] ?? '',
+                        'eventName'     => $options['event_name'] ?? 'floaty_click',
 		);
 
 		wp_localize_script( 'floaty-button', 'FLOATY_BUTTON_SETTINGS', $config );
