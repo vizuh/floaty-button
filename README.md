@@ -3,6 +3,8 @@
 ## Overview
 The Floaty Button plugin adds a customizable floating CTA button to your WordPress site. It can open a link in a new tab or display an iframe in a modal window while pushing a dataLayer event for tracking.
 
+**Security goal:** This plugin aims to comply with WordPress.org’s plugin guidelines and the WordPress Plugin Security Handbook, prioritizing least privilege, full input validation/sanitization, and secure use of the WordPress APIs.
+
 ## Installation
 1. Place the `floaty-button` folder in your `wp-content/plugins/` directory.
 2. Activate **Floaty Button** from **Plugins** in the WordPress Admin Dashboard.
@@ -46,3 +48,12 @@ Use the **Custom CSS** field to override colors, spacing, or positioning. Exampl
     left: 40px;
 }
 ```
+
+## Requirements
+
+- WordPress 6.4 or later (tested up to 6.6)
+- PHP 8.0 or later
+
+## Licensing
+
+Floaty Button is released under the **GPLv2 or later** license. See https://www.gnu.org/licenses/gpl-2.0.html for the full text and ensure all bundled assets remain GPL-compatible.
