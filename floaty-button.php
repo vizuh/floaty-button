@@ -1,11 +1,11 @@
 <?php
 /**
  * Plugin Name: Floaty Button
- * Plugin URI:  https://example.com/floaty-button
- * Description: A customizable floating CTA button that can open links or iframe modals.
+ * Plugin URI:  https://github.com/vizuh/floaty-button
+ * Description: Floaty button
  * Version:     1.0.0
- * Author:      Your Name
- * Author URI:  https://example.com
+ * Author:      Vizuh
+ * Author URI:  https://vizuh.com
  * Text Domain: floaty-button
  * Requires at least: 6.4
  * Tested up to:      6.6
