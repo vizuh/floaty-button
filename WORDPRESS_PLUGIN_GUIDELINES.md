@@ -159,7 +159,7 @@ Example `phpcs.xml.dist`:
 
 ### Internationalization (i18n)
 
-- Wrap all user-facing strings in translation functions with the `floaty-button` text domain.
+- Wrap all user-facing strings in translation functions with the `floaty-button-main` text domain.
 - Load the text domain on init using `load_plugin_textdomain()`.
 - Escape translated output as usual (`esc_html__()`, `esc_attr__()`).
 
