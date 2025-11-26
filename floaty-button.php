@@ -29,7 +29,7 @@ class Floaty_Button_Plugin {
 
 	public function load_textdomain() {
 		load_plugin_textdomain(
-                        'floaty-button-main',
+			'floaty-button-main',
 			false,
 			dirname( plugin_basename( __FILE__ ) ) . '/languages'
 		);
