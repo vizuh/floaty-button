@@ -117,6 +117,34 @@ class Floaty_Button_Plugin {
 			'floaty_button_main_section',
 			array( 'key' => 'custom_css' )
 		);
+
+		add_settings_section(
+			'floaty_button_google_reserve_section',
+			'Google Reserve Integration',
+			null,
+			'floaty-button-settings'
+		);
+
+		add_settings_field(
+			'google_reserve_enabled',
+			'Enable Google Reserve',
+			array( $this, 'render_checkbox_field' ),
+			'floaty-button-settings',
+			'floaty_button_google_reserve_section',
+			array( 'key' => 'google_reserve_enabled' )
+		);
+
+		add_settings_field(
+			'google_reserve_merchant_id',
+			'Merchant ID',
+			array( $this, 'render_text_field' ),
+			'floaty-button-settings',
+			'floaty_button_google_reserve_section',
+			array(
+				'key' => 'google_reserve_merchant_id',
+				'description' => 'Enter the Merchant ID provided for Google Reserve (e.g., <code>my-business-name-123</code>).'
+			)
+		);
 	}
 
 	public function sanitize_options( $input ) {
@@ -130,6 +158,8 @@ class Floaty_Button_Plugin {
 		$output['iframe_url']    = esc_url_raw( $input['iframe_url'] ?? '' );
 		$output['event_name']    = sanitize_key( $input['event_name'] ?? 'floaty_click' );
 		$output['custom_css']    = wp_strip_all_tags( $input['custom_css'] ?? '' );
+		$output['google_reserve_enabled']     = ! empty( $input['google_reserve_enabled'] ) ? 1 : 0;
+		$output['google_reserve_merchant_id'] = sanitize_text_field( $input['google_reserve_merchant_id'] ?? '' );
 
 		return $output;
 	}
@@ -171,6 +201,9 @@ class Floaty_Button_Plugin {
 		$key = $args['key'];
 		$value = isset( $options[ $key ] ) ? $options[ $key ] : ( $args['default'] ?? '' );
 		echo "<input type='text' name='" . self::OPTION_KEY . "[$key]' value='" . esc_attr( $value ) . "' class='regular-text' />";
+		if ( ! empty( $args['description'] ) ) {
+			echo "<p class='description'>" . $args['description'] . "</p>";
+		}
 	}
 
 	public function render_select_field( $args ) {
