@@ -1,3 +1,13 @@
+=== Floaty Button ===
+Contributors: vizuh, hugoc, Atroci, andreluizsr90
+Tags: floating button, cta, whatsapp, booking
+Requires at least: 6.4
+Tested up to: 6.6
+Requires PHP: 8.0
+Stable tag: 1.0.0
+License: GPLv2 or later
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
+
 <div align="center">
   <a href="https://apointoo.com" target="_blank">
     <img src="assets/images/apointoo-logo.png" alt="Appointo Logo" width="200">
