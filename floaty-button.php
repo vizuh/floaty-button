@@ -6,7 +6,7 @@
  * Version:     1.0.0
  * Author:      Vizuh
  * Author URI:  https://vizuh.com
- * Text Domain: floaty-button
+ * Text Domain: floaty-button-main
  * Requires at least: 6.4
  * Tested up to:      6.6
  * Requires PHP:      8.0
@@ -30,7 +30,7 @@ class Floaty_Button_Plugin {
 
 	public function load_textdomain() {
 		load_plugin_textdomain(
-			'floaty-button',
+                        'floaty-button-main',
 			false,
 			dirname( plugin_basename( __FILE__ ) ) . '/languages'
 		);
@@ -45,14 +45,14 @@ class Floaty_Button_Plugin {
 
 		add_settings_section(
 			'floaty_button_main_section',
-			__( 'Main Settings', 'floaty-button' ),
+			__( 'Main Settings', 'floaty-button-main' ),
 			null,
 			'floaty-button-settings'
 		);
 
 		add_settings_field(
 			'enabled',
-			__( 'Enable Plugin', 'floaty-button' ),
+			__( 'Enable Plugin', 'floaty-button-main' ),
 			array( $this, 'render_checkbox_field' ),
 			'floaty-button-settings',
 			'floaty_button_main_section',
@@ -61,15 +61,15 @@ class Floaty_Button_Plugin {
 
 		add_settings_field(
 			'button_template',
-			__( 'Button Template', 'floaty-button' ),
+			__( 'Button Template', 'floaty-button-main' ),
 			array( $this, 'render_select_field' ),
 			'floaty-button-settings',
 			'floaty_button_main_section',
 			array(
 				'key'     => 'button_template',
 				'options' => array(
-					'default'  => __( 'Default Button', 'floaty-button' ),
-					'whatsapp' => __( 'WhatsApp Floating Button', 'floaty-button' ),
+					'default'  => __( 'Default Button', 'floaty-button-main' ),
+					'whatsapp' => __( 'WhatsApp Floating Button', 'floaty-button-main' ),
 				),
 				'default' => 'default',
 			)
@@ -77,7 +77,7 @@ class Floaty_Button_Plugin {
 
 		add_settings_field(
 			'button_label',
-			__( 'Button Label', 'floaty-button' ),
+			__( 'Button Label', 'floaty-button-main' ),
 			array( $this, 'render_text_field' ),
 			'floaty-button-settings',
 			'floaty_button_main_section',
@@ -86,15 +86,15 @@ class Floaty_Button_Plugin {
 
 		add_settings_field(
 			'position',
-			__( 'Button Position', 'floaty-button' ),
+			__( 'Button Position', 'floaty-button-main' ),
 			array( $this, 'render_select_field' ),
 			'floaty-button-settings',
 			'floaty_button_main_section',
 			array(
 				'key'     => 'position',
 				'options' => array(
-					'bottom_right' => __( 'Bottom Right', 'floaty-button' ),
-					'bottom_left'  => __( 'Bottom Left', 'floaty-button' ),
+					'bottom_right' => __( 'Bottom Right', 'floaty-button-main' ),
+					'bottom_left'  => __( 'Bottom Left', 'floaty-button-main' ),
 				),
 				'default' => 'bottom_right',
 			)
@@ -102,15 +102,15 @@ class Floaty_Button_Plugin {
 
 		add_settings_field(
 			'action_type',
-			__( 'Action Type', 'floaty-button' ),
+			__( 'Action Type', 'floaty-button-main' ),
 			array( $this, 'render_select_field' ),
 			'floaty-button-settings',
 			'floaty_button_main_section',
 			array(
 				'key'     => 'action_type',
 				'options' => array(
-					'link'         => __( 'Open Link', 'floaty-button' ),
-					'iframe_modal' => __( 'Open Iframe Modal', 'floaty-button' ),
+					'link'         => __( 'Open Link', 'floaty-button-main' ),
+					'iframe_modal' => __( 'Open Iframe Modal', 'floaty-button-main' ),
 				),
 			)
 		);
@@ -159,7 +159,7 @@ class Floaty_Button_Plugin {
 
 		add_settings_field(
 			'custom_css',
-			__( 'Custom CSS', 'floaty-button' ),
+			__( 'Custom CSS', 'floaty-button-main' ),
 			array( $this, 'render_textarea_field' ),
 			'floaty-button-settings',
 			'floaty_button_main_section',
@@ -168,45 +168,45 @@ class Floaty_Button_Plugin {
 
 		add_settings_section(
 			'floaty_button_whatsapp_section',
-			__( 'WhatsApp Settings', 'floaty-button' ),
+			__( 'WhatsApp Settings', 'floaty-button-main' ),
 			null,
 			'floaty-button-settings'
 		);
 
 		add_settings_field(
 			'whatsapp_phone',
-			__( 'WhatsApp Phone Number', 'floaty-button' ),
+			__( 'WhatsApp Phone Number', 'floaty-button-main' ),
 			array( $this, 'render_text_field' ),
 			'floaty-button-settings',
 			'floaty_button_whatsapp_section',
 			array(
 				'key'         => 'whatsapp_phone',
-				'description' => __( 'Enter your WhatsApp number in international format (digits only). Example: 5511999999999.', 'floaty-button' ),
+				'description' => __( 'Enter your WhatsApp number in international format (digits only). Example: 5511999999999.', 'floaty-button-main' ),
 			)
 		);
 
 		add_settings_field(
 			'whatsapp_message',
-			__( 'Prefilled Message', 'floaty-button' ),
+			__( 'Prefilled Message', 'floaty-button-main' ),
 			array( $this, 'render_text_field' ),
 			'floaty-button-settings',
 			'floaty_button_whatsapp_section',
 			array(
 				'key'         => 'whatsapp_message',
-				'description' => __( 'Optional. Example: Hi, I\'d like to book an appointment.', 'floaty-button' ),
+				'description' => __( 'Optional. Example: Hi, I\'d like to book an appointment.', 'floaty-button-main' ),
 			)
 		);
 
 		add_settings_section(
 			'floaty_button_google_reserve_section',
-			__( 'Google Reserve Integration', 'floaty-button' ),
+			__( 'Google Reserve Integration', 'floaty-button-main' ),
 			null,
 			'floaty-button-settings'
 		);
 
 		add_settings_field(
 			'google_reserve_enabled',
-			__( 'Enable Google Reserve', 'floaty-button' ),
+			__( 'Enable Google Reserve', 'floaty-button-main' ),
 			array( $this, 'render_checkbox_field' ),
 			'floaty-button-settings',
 			'floaty_button_google_reserve_section',
@@ -215,13 +215,13 @@ class Floaty_Button_Plugin {
 
 		add_settings_field(
 			'google_reserve_merchant_id',
-			__( 'Merchant ID', 'floaty-button' ),
+			__( 'Merchant ID', 'floaty-button-main' ),
 			array( $this, 'render_text_field' ),
 			'floaty-button-settings',
 			'floaty_button_google_reserve_section',
 			array(
 				'key'         => 'google_reserve_merchant_id',
-				'description' => __( 'Enter the Merchant ID provided by Appointo (e.g., <code>my-business-name-123</code>).', 'floaty-button' ),
+				'description' => __( 'Enter the Merchant ID provided by Appointo (e.g., <code>my-business-name-123</code>).', 'floaty-button-main' ),
 			)
 		);
 	}
@@ -384,7 +384,7 @@ class Floaty_Button_Plugin {
 		);
 
 		wp_localize_script( 'floaty-button', 'FLOATY_BUTTON_SETTINGS', $config );
-		wp_enqueue_script( 'floaty-button' );
+            wp_enqueue_script( 'floaty-button' );
 	}
 }
 
