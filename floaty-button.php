@@ -16,6 +16,78 @@
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
+}
+
+class Floaty_Button_Plugin {
+	const OPTION_KEY = 'floaty_button_options';
+
+	public function __construct() {
+		add_action( 'plugins_loaded', array( $this, 'load_textdomain' ) );
+		add_action( 'admin_init', array( $this, 'register_settings' ) );
+		add_action( 'admin_menu', array( $this, 'add_settings_page' ) );
+		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
+	}
+
+	public function load_textdomain() {
+		load_plugin_textdomain(
+			'floaty-button',
+			false,
+			dirname( plugin_basename( __FILE__ ) ) . '/languages'
+		);
+	}
+
+	public function register_settings() {
+		register_setting(
+			'floaty_button_settings',
+			self::OPTION_KEY,
+			array( $this, 'sanitize_options' )
+		);
+
+		add_settings_section(
+			'floaty_button_main_section',
+			__( 'Main Settings', 'floaty-button' ),
+			null,
+			'floaty-button-settings'
+		);
+
+		add_settings_field(
+			'enabled',
+			__( 'Enable Plugin', 'floaty-button' ),
+			array( $this, 'render_checkbox_field' ),
+			'floaty-button-settings',
+			'floaty_button_main_section',
+			array( 'key' => 'enabled' )
+		);
+
+		add_settings_field(
+			'button_template',
+			__( 'Button Template', 'floaty-button' ),
+			array( $this, 'render_select_field' ),
+			'floaty-button-settings',
+			'floaty_button_main_section',
+			array(
+				'key'     => 'button_template',
+				'options' => array(
+					'default'  => __( 'Default Button', 'floaty-button' ),
+					'whatsapp' => __( 'WhatsApp Floating Button', 'floaty-button' ),
+				),
+				'default' => 'default',
+			)
+		);
+
+		add_settings_field(
+			'button_label',
+			__( 'Button Label', 'floaty-button' ),
+			array( $this, 'render_text_field' ),
+			'floaty-button-settings',
+			'floaty_button_main_section',
+			array( 'key' => 'button_label', 'default' => 'Book now' )
+		);
+
+		add_settings_field(
+			'position',
+			__( 'Button Position', 'floaty-button' ),
+			array( $this, 'render_select_field' ),
 			'floaty-button-settings',
 			'floaty_button_main_section',
 			array(
