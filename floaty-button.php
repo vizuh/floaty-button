@@ -21,11 +21,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Floaty_Button_Plugin {
 	const OPTION_KEY = 'floaty_button_options';
 
-	public function __construct() {
-		add_action( 'admin_init', array( $this, 'register_settings' ) );
-		add_action( 'admin_menu', array( $this, 'add_settings_page' ) );
-		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
-	}
+        public function __construct() {
+                add_action( 'admin_init', array( $this, 'register_settings' ) );
+                add_action( 'admin_menu', array( $this, 'add_settings_page' ) );
+                add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ), 20 );
+        }
 
 	public function load_textdomain() {
 		load_plugin_textdomain(
@@ -253,12 +253,15 @@ class Floaty_Button_Plugin {
 
 		$output['iframe_url']    = esc_url_raw( $input['iframe_url'] ?? '' );
 		$output['event_name']    = sanitize_key( $input['event_name'] ?? 'floaty_click' );
-		$output['custom_css']    = wp_strip_all_tags( $input['custom_css'] ?? '' );
-		$output['whatsapp_phone']   = preg_replace( '/[^0-9]/', '', $input['whatsapp_phone'] ?? '' );
-		$output['whatsapp_message'] = sanitize_text_field( $input['whatsapp_message'] ?? '' );
+                $output['custom_css']    = wp_strip_all_tags( $input['custom_css'] ?? '' );
+                $output['whatsapp_phone']   = preg_replace( '/[^0-9]/', '', $input['whatsapp_phone'] ?? '' );
+                $output['whatsapp_message'] = sanitize_text_field( $input['whatsapp_message'] ?? '' );
 
-		return $output;
-	}
+                $output['google_reserve_enabled']     = ! empty( $input['google_reserve_enabled'] ) ? 1 : 0;
+                $output['google_reserve_merchant_id'] = sanitize_text_field( $input['google_reserve_merchant_id'] ?? '' );
+
+                return $output;
+        }
 
 	public function add_settings_page() {
 		add_options_page(
@@ -378,9 +381,13 @@ class Floaty_Button_Plugin {
 			'linkTarget'      => $options['link_target'] ?? '_blank',
 			'iframeUrl'       => $options['iframe_url'] ?? '',
 			'eventName'       => $options['event_name'] ?? 'floaty_click',
-			'whatsappPhone'   => $options['whatsapp_phone'] ?? '',
-			'whatsappMessage' => $options['whatsapp_message'] ?? '',
-		);
+                        'whatsappPhone'   => $options['whatsapp_phone'] ?? '',
+                        'whatsappMessage' => $options['whatsapp_message'] ?? '',
+                        'googleReserve'   => array(
+                                'enabled'    => ! empty( $options['google_reserve_enabled'] ),
+                                'merchantId' => $options['google_reserve_merchant_id'] ?? '',
+                        ),
+                );
 
 		wp_localize_script( 'floaty-button', 'FLOATY_BUTTON_SETTINGS', $config );
             wp_enqueue_script( 'floaty-button' );
