@@ -18,14 +18,15 @@
 			exit;
 		}
 		
-		class Floaty_Button_Plugin {
-			const OPTION_KEY = 'floaty_button_options';
-		
-			public function __construct() {
-				add_action( 'admin_init', array( $this, 'register_settings' ) );
-				add_action( 'admin_menu', array( $this, 'add_settings_page' ) );
-				add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ), 20 );
-				}
+class Floaty_Button_Plugin {
+        const OPTION_KEY = 'floaty_button_options';
+
+        public function __construct() {
+                add_action( 'plugins_loaded', array( $this, 'load_textdomain' ) );
+                add_action( 'admin_init', array( $this, 'register_settings' ) );
+                add_action( 'admin_menu', array( $this, 'add_settings_page' ) );
+                add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ), 20 );
+                }
 		
 			public function load_textdomain() {
 				load_plugin_textdomain(
@@ -114,47 +115,47 @@
 					)
 				);
 		
-				add_settings_field(
-					'link_url',
-					'Link URL',
-					array( $this, 'render_text_field' ),
-					'floaty-button-settings',
-					'floaty_button_main_section',
-					array( 'key' => 'link_url' )
-				);
-		
-				add_settings_field(
-					'link_target',
-					'Link Target',
-					array( $this, 'render_select_field' ),
-					'floaty-button-settings',
-					'floaty_button_main_section',
-					array(
-						'key' => 'link_target',
-						'options' => array(
-							'_blank' => 'New Tab (_blank)',
-							'_self' => 'Same Tab (_self)'
-						)
-					)
-				);
-		
-				add_settings_field(
-					'iframe_url',
-					'Iframe URL',
-					array( $this, 'render_text_field' ),
-					'floaty-button-settings',
-					'floaty_button_main_section',
-					array( 'key' => 'iframe_url' )
-				);
-		
-				add_settings_field(
-					'event_name',
-					'DataLayer Event Name',
-					array( $this, 'render_text_field' ),
-					'floaty-button-settings',
-					'floaty_button_main_section',
-					array( 'key' => 'event_name', 'default' => 'floaty_click' )
-				);
+                        add_settings_field(
+                                        'link_url',
+                                        __( 'Link URL', 'floaty-button-main' ),
+                                        array( $this, 'render_text_field' ),
+                                        'floaty-button-settings',
+                                        'floaty_button_main_section',
+                                        array( 'key' => 'link_url' )
+                                );
+
+                                add_settings_field(
+                                        'link_target',
+                                        __( 'Link Target', 'floaty-button-main' ),
+                                        array( $this, 'render_select_field' ),
+                                        'floaty-button-settings',
+                                        'floaty_button_main_section',
+                                        array(
+                                                'key' => 'link_target',
+                                                'options' => array(
+                                                        '_blank' => __( 'New Tab (_blank)', 'floaty-button-main' ),
+                                                        '_self' => __( 'Same Tab (_self)', 'floaty-button-main' ),
+                                                ),
+                                        )
+                                );
+
+                                add_settings_field(
+                                        'iframe_url',
+                                        __( 'Iframe URL', 'floaty-button-main' ),
+                                        array( $this, 'render_text_field' ),
+                                        'floaty-button-settings',
+                                        'floaty_button_main_section',
+                                        array( 'key' => 'iframe_url' )
+                                );
+
+                                add_settings_field(
+                                        'event_name',
+                                        __( 'DataLayer Event Name', 'floaty-button-main' ),
+                                        array( $this, 'render_text_field' ),
+                                        'floaty-button-settings',
+                                        'floaty_button_main_section',
+                                        array( 'key' => 'event_name', 'default' => 'floaty_click' )
+                                );
 		
 		                add_settings_field(
 		                        'custom_css',
@@ -228,98 +229,102 @@
 				);
 			}
 		
-			public function sanitize_options( $input ) {
-		                $output = array();
+        public function sanitize_options( $input ) {
+                if ( ! is_array( $input ) ) {
+                        return array();
+                }
+
+                $input  = wp_unslash( $input );
+                $output = array();
+
+                $output['enabled']         = ! empty( $input['enabled'] ) ? 1 : 0;
+                $output['button_template'] = in_array( $input['button_template'] ?? 'default', array( 'default', 'whatsapp' ), true ) ? $input['button_template'] : 'default';
+                $output['button_label']    = sanitize_text_field( $input['button_label'] ?? __( 'Book now', 'floaty-button-main' ) );
+                $output['position']        = in_array(
+                        $input['position'] ?? 'bottom_right',
+                        array( 'bottom_right', 'bottom_left' ),
+                        true
+                ) ? $input['position'] : 'bottom_right';
+
+                $output['action_type'] = in_array(
+                        $input['action_type'] ?? 'link',
+                        array( 'link', 'iframe_modal' ),
+                        true
+                ) ? $input['action_type'] : 'link';
+
+                $output['link_url'] = esc_url_raw( $input['link_url'] ?? '' );
+
+                $output['link_target'] = in_array(
+                        $input['link_target'] ?? '_blank',
+                        array( '_blank', '_self' ),
+                        true
+                ) ? $input['link_target'] : '_blank';
+
+                $output['iframe_url']       = esc_url_raw( $input['iframe_url'] ?? '' );
+                $output['event_name']       = sanitize_key( $input['event_name'] ?? 'floaty_click' );
+                $output['custom_css']       = isset( $input['custom_css'] ) ? wp_strip_all_tags( $input['custom_css'] ) : '';
+                $output['whatsapp_phone']   = preg_replace( '/[^0-9]/', '', $input['whatsapp_phone'] ?? '' );
+                $output['whatsapp_message'] = sanitize_text_field( $input['whatsapp_message'] ?? '' );
+
+                $output['google_reserve_enabled']     = ! empty( $input['google_reserve_enabled'] ) ? 1 : 0;
+                $output['google_reserve_merchant_id'] = sanitize_text_field( $input['google_reserve_merchant_id'] ?? '' );
+
+                return $output;
+        }
 		
-				$output['enabled']       = ! empty( $input['enabled'] ) ? 1 : 0;
-				$output['button_template'] = in_array( $input['button_template'] ?? 'default', array( 'default', 'whatsapp' ), true ) ? $input['button_template'] : 'default';
-				$output['button_label']  = sanitize_text_field( $input['button_label'] ?? 'Book now' );
-				$output['position']      = in_array(
-					$input['position'] ?? 'bottom_right',
-					array( 'bottom_right', 'bottom_left' ),
-					true
-				) ? $input['position'] : 'bottom_right';
+        public function add_settings_page() {
+                add_options_page(
+                        __( 'Floaty Button Settings', 'floaty-button-main' ),
+                        __( 'Floaty Button', 'floaty-button-main' ),
+                        'manage_options',
+                        'floaty-button-settings',
+                        array( $this, 'render_settings_page' )
+                );
+        }
 		
-				$output['action_type']   = in_array(
-					$input['action_type'] ?? 'link',
-					array( 'link', 'iframe_modal' ),
-					true
-				) ? $input['action_type'] : 'link';
+        public function render_settings_page() {
+                ?>
+                <div class="wrap">
+                        <h1><?php esc_html_e( 'Floaty Button Settings', 'floaty-button-main' ); ?></h1>
+                        <form action="options.php" method="post">
+                                <?php
+                                settings_fields( 'floaty_button_settings' );
+                                do_settings_sections( 'floaty-button-settings' );
+                                submit_button();
+                                ?>
+                        </form>
+                </div>
+                <?php
+        }
 		
-				$output['link_url']      = esc_url_raw( $input['link_url'] ?? '' );
+        public function render_checkbox_field( $args ) {
+                $options = get_option( self::OPTION_KEY );
+                $key     = $args['key'];
+                printf(
+                        '<input type="checkbox" name="%s[%s]" value="1" %s />',
+                        esc_attr( self::OPTION_KEY ),
+                        esc_attr( $key ),
+                        checked( ! empty( $options[ $key ] ), true, false )
+                );
+        }
 		
-				$output['link_target']   = in_array(
-					$input['link_target'] ?? '_blank',
-					array( '_blank', '_self' ),
-					true
-				) ? $input['link_target'] : '_blank';
-		
-				$output['iframe_url']    = esc_url_raw( $input['iframe_url'] ?? '' );
-				$output['event_name']    = sanitize_key( $input['event_name'] ?? 'floaty_click' );
-		$output['custom_css']    = isset( $input['custom_css'] ) ? wp_strip_all_tags( $input['custom_css'] ) : '';
-		                $output['whatsapp_phone']   = preg_replace( '/[^0-9]/', '', $input['whatsapp_phone'] ?? '' );
-		                $output['whatsapp_message'] = sanitize_text_field( $input['whatsapp_message'] ?? '' );
-		
-		                $output['google_reserve_enabled']     = ! empty( $input['google_reserve_enabled'] ) ? 1 : 0;
-		                $output['google_reserve_merchant_id'] = sanitize_text_field( $input['google_reserve_merchant_id'] ?? '' );
-		
-		                return $output;
-		        }
-		
-			public function add_settings_page() {
-				add_options_page(
-					'Floaty Button Settings',
-					'Floaty Button',
-					'manage_options',
-					'floaty-button-settings',
-					array( $this, 'render_settings_page' )
-				);
-			}
-		
-			public function render_settings_page() {
-				?>
-				<div class="wrap">
-					<h1>Floaty Button Settings</h1>
-					<form action="options.php" method="post">
-						<?php
-						settings_fields( 'floaty_button_settings' );
-						do_settings_sections( 'floaty-button-settings' );
-						submit_button();
-						?>
-					</form>
-				</div>
-				<?php
-			}
-		
-			public function render_checkbox_field( $args ) {
-				$options = get_option( self::OPTION_KEY );
-				$key = $args['key'];
-				$checked = isset( $options[ $key ] ) && $options[ $key ] ? 'checked' : '';
-				printf(
-					'<input type="checkbox" name="%s[%s]" value="1" %s />',
-					esc_attr( self::OPTION_KEY ),
-					esc_attr( $key ),
-					esc_attr( $checked )
-				);
-			}
-		
-			public function render_text_field( $args ) {
-				$options = get_option( self::OPTION_KEY );
-				$key = $args['key'];
-				$value = isset( $options[ $key ] ) ? $options[ $key ] : ( $args['default'] ?? '' );
-				printf(
-					'<input type="text" name="%s[%s]" value="%s" class="regular-text" />',
-					esc_attr( self::OPTION_KEY ),
-					esc_attr( $key ),
-					esc_attr( $value )
-				);
-				if ( ! empty( $args['description'] ) ) {
-					printf(
-						'<p class="description">%s</p>',
-						wp_kses_post( $args['description'] )
-					);
-				}
-			}
+        public function render_text_field( $args ) {
+                $options = get_option( self::OPTION_KEY );
+                $key     = $args['key'];
+                $value   = isset( $options[ $key ] ) ? $options[ $key ] : ( $args['default'] ?? '' );
+                printf(
+                        '<input type="text" name="%s[%s]" value="%s" class="regular-text" />',
+                        esc_attr( self::OPTION_KEY ),
+                        esc_attr( $key ),
+                        esc_attr( $value )
+                );
+                if ( ! empty( $args['description'] ) ) {
+                        printf(
+                                '<p class="description">%s</p>',
+                                wp_kses_post( $args['description'] )
+                        );
+                }
+        }
 		
 			public function render_select_field( $args ) {
 				$options = get_option( self::OPTION_KEY );
@@ -399,8 +404,8 @@
 		wp_add_inline_style( 'floaty-button', $inline );
 		}
 		
-				$config = array(
-					'buttonLabel'     => $options['button_label'] ?? 'Book now',
+                                $config = array(
+                                        'buttonLabel'     => $options['button_label'] ?? __( 'Book now', 'floaty-button-main' ),
 					'buttonTemplate'  => $options['button_template'] ?? 'default',
 					'position'        => $options['position'] ?? 'bottom_right',
 					'actionType'      => $options['action_type'] ?? 'link',
