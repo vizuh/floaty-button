@@ -1,3 +1,13 @@
+=== Floaty Button ===
+Contributors: vizuh, hugoc, Atroci, andreluizsr90
+Tags: floating button, cta, whatsapp, booking
+Requires at least: 6.4
+Tested up to: 6.6
+Requires PHP: 7.4
+Stable tag: 1.0.0
+License: GPLv2 or later
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
+
 <div align="center">
   <a href="https://apointoo.com" target="_blank">
     <img src="assets/images/apointoo-logo.png" alt="Appointo Logo" width="200">
@@ -100,7 +110,7 @@ Use the **Custom CSS** field to override colors, spacing, or positioning. Exampl
 ### 📋 Requirements
 
 *   WordPress 6.4 or later (tested up to 6.6)
-*   PHP 8.0 or later
+*   PHP 7.4 or later
 
 ### 📄 Licensing
 
@@ -193,7 +203,7 @@ Use o campo **CSS Personalizado** para substituir cores, espaçamento ou posicio
 ### 📋 Requisitos
 
 *   WordPress 6.4 ou superior (testado até 6.6)
-*   PHP 8.0 ou superior
+*   PHP 7.4 ou superior
 
 ### 📄 Licenciamento
 
