@@ -227,9 +227,13 @@ class Floaty_Button_Plugin {
 						'description' => __( 'Enter the Merchant ID provided by Appointo (e.g., <code>my-business-name-123</code>).', 'floaty-button-main' ),
 					)
 				);
-			}
-		
+                        }
+
         public function sanitize_options( $input ) {
+                if ( ! current_user_can( 'manage_options' ) ) {
+                        return get_option( self::OPTION_KEY, array() );
+                }
+
                 if ( ! is_array( $input ) ) {
                         return array();
                 }
@@ -281,8 +285,11 @@ class Floaty_Button_Plugin {
                         array( $this, 'render_settings_page' )
                 );
         }
-		
+
         public function render_settings_page() {
+                if ( ! current_user_can( 'manage_options' ) ) {
+                        return;
+                }
                 ?>
                 <div class="wrap">
                         <h1><?php esc_html_e( 'Floaty Button Settings', 'floaty-button-main' ); ?></h1>
@@ -361,8 +368,8 @@ class Floaty_Button_Plugin {
 		}
 		}
 		
-		public function enqueue_scripts() {
-		$options = get_option( self::OPTION_KEY );
+public function enqueue_scripts() {
+$options = get_option( self::OPTION_KEY );
 		
 		if ( empty( $options['enabled'] ) ) {
 		return;
@@ -372,9 +379,9 @@ class Floaty_Button_Plugin {
 		return;
 		}
 		
-		if ( 'link' === ( $options['action_type'] ?? 'link' ) && empty( $options['link_url'] ) ) {
-		return;
-		}
+if ( 'link' === ( $options['action_type'] ?? 'link' ) && empty( $options['link_url'] ) && 'whatsapp' !== ( $options['button_template'] ?? '' ) ) {
+return;
+}
 		
 		if ( 'iframe_modal' === ( $options['action_type'] ?? 'link' ) && empty( $options['iframe_url'] ) ) {
 		return;
