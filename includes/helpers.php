@@ -47,3 +47,20 @@ function vzflty_get_options() {
 
 	return wp_parse_args( $raw_options, vzflty_get_default_options() );
 }
+
+/**
+ * Helper to safely fetch an option value with a default.
+ *
+ * @param array  $options Options array.
+ * @param string $key     Option key.
+ * @param mixed  $default Default value.
+ *
+ * @return mixed
+ */
+function vzflty_get_option_value( $options, $key, $default = '' ) {
+	if ( ! is_array( $options ) ) {
+		return $default;
+	}
+
+	return array_key_exists( $key, $options ) ? $options[ $key ] : $default;
+}

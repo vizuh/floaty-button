@@ -1,164 +1,261 @@
 /* ==============================
-   Floaty Button — WhatsApp Skin
-   Scoped + premium bubble
+   Floaty Button — core styles
+   Scoped to #vzflty-button-container
    ============================== */
 
-#floaty-button-container{
+#vzflty-button-container {
   z-index: 999999;
-
-  /* Tweakables */
-  --floaty-wa-offset: 20px;
-  --floaty-wa-size: clamp(58px, 4vw + 44px, 66px);
-
-  --floaty-wa-bg: #25d366;
-  --floaty-wa-bg-hover: #1fb156;
-
-  /* More “premium” shadow stack */
-  --floaty-wa-shadow:
-    0 14px 30px rgba(0,0,0,.18),
-    0 6px 14px rgba(0,0,0,.12);
-  --floaty-wa-shadow-hover:
-    0 18px 42px rgba(0,0,0,.26),
-    0 8px 18px rgba(0,0,0,.14);
-
-  --floaty-wa-focus:
-    0 0 0 3px rgba(255,255,255,.9),
-    0 0 0 6px rgba(37,211,102,.35);
-
-  --floaty-wa-ease: 180ms cubic-bezier(.2,.8,.2,1);
+  --vzflty-offset: 20px;
+  --vzflty-size: clamp(54px, 4vw + 38px, 64px);
+  --vzflty-font: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
 }
 
-/* Button */
-#floaty-button-container .floaty-whatsapp-btn{
+/* Default button */
+#vzflty-button-container .vzflty-button {
   position: fixed;
-  width: var(--floaty-wa-size);
-  height: var(--floaty-wa-size);
+  min-width: 140px;
+  padding: 14px 18px;
+  border-radius: 999px;
+  font-family: var(--vzflty-font);
+  font-size: 15px;
+  font-weight: 600;
+  color: #fff;
+  background: linear-gradient(160deg, #4b8bff, #2246d9);
+  border: none;
+  cursor: pointer;
+  box-shadow:
+    0 14px 30px rgba(0, 0, 0, .16),
+    0 6px 12px rgba(0, 0, 0, .10);
+  transition: transform 180ms cubic-bezier(.2, .8, .2, 1),
+    box-shadow 180ms cubic-bezier(.2, .8, .2, 1);
+}
+
+#vzflty-button-container .vzflty-button:hover {
+  transform: translateY(-1px);
+  box-shadow:
+    0 18px 38px rgba(0, 0, 0, .22),
+    0 10px 16px rgba(0, 0, 0, .12);
+}
+
+#vzflty-button-container .vzflty-button:active {
+  transform: translateY(0);
+}
+
+#vzflty-button-container .vzflty-button:focus {
+  outline: none;
+}
+
+#vzflty-button-container .vzflty-button:focus-visible {
+  box-shadow:
+    0 18px 38px rgba(0, 0, 0, .22),
+    0 10px 16px rgba(0, 0, 0, .12),
+    0 0 0 3px rgba(255, 255, 255, .9),
+    0 0 0 6px rgba(75, 139, 255, .42);
+}
+
+#vzflty-button-container .vzflty-position-bottom_right {
+  right: calc(var(--vzflty-offset) + env(safe-area-inset-right, 0px));
+  bottom: calc(var(--vzflty-offset) + env(safe-area-inset-bottom, 0px));
+}
+
+#vzflty-button-container .vzflty-position-bottom_left {
+  left: calc(var(--vzflty-offset) + env(safe-area-inset-left, 0px));
+  bottom: calc(var(--vzflty-offset) + env(safe-area-inset-bottom, 0px));
+}
+
+/* ==============================
+   WhatsApp skin
+   ============================== */
+
+#vzflty-button-container {
+  --vzflty-wa-offset: 20px;
+  --vzflty-wa-size: clamp(58px, 4vw + 44px, 66px);
+  --vzflty-wa-bg: #25d366;
+  --vzflty-wa-bg-hover: #1fb156;
+  --vzflty-wa-shadow:
+    0 14px 30px rgba(0, 0, 0, .18),
+    0 6px 14px rgba(0, 0, 0, .12);
+  --vzflty-wa-shadow-hover:
+    0 18px 42px rgba(0, 0, 0, .26),
+    0 8px 18px rgba(0, 0, 0, .14);
+  --vzflty-wa-focus:
+    0 0 0 3px rgba(255, 255, 255, .9),
+    0 0 0 6px rgba(37, 211, 102, .35);
+  --vzflty-wa-ease: 180ms cubic-bezier(.2, .8, .2, 1);
+}
+
+#vzflty-button-container .vzflty-whatsapp-btn {
+  position: fixed;
+  width: var(--vzflty-wa-size);
+  height: var(--vzflty-wa-size);
   border-radius: 9999px;
   padding: 0;
   line-height: 0;
-
-  /* safe-area aware bottom offset */
-  bottom: calc(var(--floaty-wa-offset) + env(safe-area-inset-bottom, 0px));
-
+  bottom: calc(var(--vzflty-wa-offset) + env(safe-area-inset-bottom, 0px));
   display: inline-flex;
   align-items: center;
   justify-content: center;
-
   background:
-    radial-gradient(120% 120% at 30% 25%, rgba(255,255,255,.22) 0%, rgba(255,255,255,0) 52%),
-    linear-gradient(180deg, rgba(0,0,0,.06), rgba(0,0,0,0) 55%),
-    var(--floaty-wa-bg);
-
-  box-shadow: var(--floaty-wa-shadow);
+    radial-gradient(120% 120% at 30% 25%, rgba(255, 255, 255, .22) 0%, rgba(255, 255, 255, 0) 52%),
+    linear-gradient(180deg, rgba(0, 0, 0, .06), rgba(0, 0, 0, 0) 55%),
+    var(--vzflty-wa-bg);
+  box-shadow: var(--vzflty-wa-shadow);
   text-decoration: none;
   border: 0;
   cursor: pointer;
-
-  /* Important for ::before/::after */
-  position: fixed;
-  isolation: isolate;         /* keeps highlights contained */
+  isolation: isolate;
   overflow: visible;
-  transform: translateZ(0);   /* crisper on some GPUs */
-
+  transform: translateZ(0);
   transition:
-    transform var(--floaty-wa-ease),
-    box-shadow var(--floaty-wa-ease),
-    background var(--floaty-wa-ease);
-
+    transform var(--vzflty-wa-ease),
+    box-shadow var(--vzflty-wa-ease),
+    background var(--vzflty-wa-ease);
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
 }
 
-#floaty-button-container .floaty-whatsapp-btn.floaty-position-bottom_right{
-  right: calc(var(--floaty-wa-offset) + env(safe-area-inset-right, 0px));
+#vzflty-button-container .vzflty-whatsapp-btn.vzflty-position-bottom_right {
+  right: calc(var(--vzflty-wa-offset) + env(safe-area-inset-right, 0px));
 }
 
-#floaty-button-container .floaty-whatsapp-btn.floaty-position-bottom_left{
-  left: calc(var(--floaty-wa-offset) + env(safe-area-inset-left, 0px));
+#vzflty-button-container .vzflty-whatsapp-btn.vzflty-position-bottom_left {
+  left: calc(var(--vzflty-wa-offset) + env(safe-area-inset-left, 0px));
 }
 
-/* Subtle glass highlight */
-#floaty-button-container .floaty-whatsapp-btn::before{
+#vzflty-button-container .vzflty-whatsapp-btn::before {
   content: "";
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  background: radial-gradient(90% 70% at 70% 28%, rgba(255,255,255,.22) 0%, rgba(255,255,255,0) 60%);
+  background: radial-gradient(90% 70% at 70% 28%, rgba(255, 255, 255, .22) 0%, rgba(255, 255, 255, 0) 60%);
   opacity: .85;
   pointer-events: none;
   z-index: 0;
 }
 
-/* Hover / focus */
-#floaty-button-container .floaty-whatsapp-btn:hover{
+#vzflty-button-container .vzflty-whatsapp-btn:hover {
   transform: translateY(-2px) scale(1.03);
-  box-shadow: var(--floaty-wa-shadow-hover);
+  box-shadow: var(--vzflty-wa-shadow-hover);
   background:
-    radial-gradient(120% 120% at 30% 25%, rgba(255,255,255,.24) 0%, rgba(255,255,255,0) 52%),
-    linear-gradient(180deg, rgba(0,0,0,.05), rgba(0,0,0,0) 55%),
-    var(--floaty-wa-bg-hover);
+    radial-gradient(120% 120% at 30% 25%, rgba(255, 255, 255, .24) 0%, rgba(255, 255, 255, 0) 52%),
+    linear-gradient(180deg, rgba(0, 0, 0, .05), rgba(0, 0, 0, 0) 55%),
+    var(--vzflty-wa-bg-hover);
 }
 
-#floaty-button-container .floaty-whatsapp-btn:active{
+#vzflty-button-container .vzflty-whatsapp-btn:active {
   transform: translateY(0) scale(0.99);
-  box-shadow: var(--floaty-wa-shadow);
+  box-shadow: var(--vzflty-wa-shadow);
 }
 
-/* Modern focus ring (keyboard only) */
-#floaty-button-container .floaty-whatsapp-btn:focus{
+#vzflty-button-container .vzflty-whatsapp-btn:focus {
   outline: none;
 }
 
-#floaty-button-container .floaty-whatsapp-btn:focus-visible{
-  box-shadow: var(--floaty-wa-shadow-hover), var(--floaty-wa-focus);
+#vzflty-button-container .vzflty-whatsapp-btn:focus-visible {
+  box-shadow: var(--vzflty-wa-shadow-hover), var(--vzflty-wa-focus);
 }
 
-/* Icon sizing + centering (robust) */
-#floaty-button-container .floaty-whatsapp-icon{
+#vzflty-button-container .vzflty-whatsapp-icon {
   width: 100%;
   height: 100%;
   display: grid;
   place-items: center;
   line-height: 0;
-  z-index: 1; /* above highlight */
+  z-index: 1;
 }
 
-#floaty-button-container .floaty-whatsapp-icon svg{
-  width: calc(var(--floaty-wa-size) * 0.46);
-  height: calc(var(--floaty-wa-size) * 0.46);
+#vzflty-button-container .vzflty-whatsapp-icon svg {
+  width: calc(var(--vzflty-wa-size) * 0.46);
+  height: calc(var(--vzflty-wa-size) * 0.46);
   display: block;
   flex: none;
   fill: #fff;
 }
 
-/* Optional “ring” pulse (only if you add the class floaty-whatsapp-btn--pulse) */
-#floaty-button-container .floaty-whatsapp-btn.floaty-whatsapp-btn--pulse::after{
+#vzflty-button-container .vzflty-whatsapp-btn.vzflty-whatsapp-btn--pulse::after {
   content: "";
   position: absolute;
   inset: -7px;
   border-radius: inherit;
-  border: 2px solid rgba(37,211,102,.28);
+  border: 2px solid rgba(37, 211, 102, .28);
   opacity: 0;
   transform: scale(.9);
-  transition: opacity var(--floaty-wa-ease), transform var(--floaty-wa-ease);
+  transition: opacity var(--vzflty-wa-ease), transform var(--vzflty-wa-ease);
   pointer-events: none;
   z-index: 0;
 }
 
-#floaty-button-container .floaty-whatsapp-btn.floaty-whatsapp-btn--pulse:hover::after,
-#floaty-button-container .floaty-whatsapp-btn.floaty-whatsapp-btn--pulse:focus-visible::after{
+#vzflty-button-container .vzflty-whatsapp-btn.vzflty-whatsapp-btn--pulse:hover::after,
+#vzflty-button-container .vzflty-whatsapp-btn.vzflty-whatsapp-btn--pulse:focus-visible::after {
   opacity: 1;
   transform: scale(1.06);
 }
 
-/* Reduced motion */
-@media (prefers-reduced-motion: reduce){
-  #floaty-button-container .floaty-whatsapp-btn,
-  #floaty-button-container .floaty-whatsapp-btn::after{
+@media (prefers-reduced-motion: reduce) {
+  #vzflty-button-container .vzflty-button,
+  #vzflty-button-container .vzflty-whatsapp-btn,
+  #vzflty-button-container .vzflty-whatsapp-btn::after {
     transition: none !important;
   }
-  #floaty-button-container .floaty-whatsapp-btn:hover{
+  #vzflty-button-container .vzflty-whatsapp-btn:hover {
     transform: none !important;
-    box-shadow: var(--floaty-wa-shadow) !important;
+    box-shadow: var(--vzflty-wa-shadow) !important;
+  }
+}
+
+/* ==============================
+   Modal
+   ============================== */
+
+#vzflty-button-container .vzflty-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.52);
+  z-index: 999998;
+}
+
+#vzflty-button-container .vzflty-modal {
+  position: fixed;
+  inset: 5% 8%;
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, .28);
+  z-index: 999999;
+  display: flex;
+  flex-direction: column;
+}
+
+#vzflty-button-container .vzflty-modal-iframe {
+  width: 100%;
+  height: calc(100vh - 120px);
+  border: 0;
+}
+
+#vzflty-button-container .vzflty-modal-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, .92);
+  color: #1f2933;
+  font-size: 22px;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, .18);
+}
+
+#vzflty-button-container .vzflty-modal-close:hover {
+  background: #fff;
+}
+
+@media (max-width: 767px) {
+  #vzflty-button-container .vzflty-modal {
+    inset: 4% 3%;
+  }
+  #vzflty-button-container .vzflty-modal-iframe {
+    height: calc(100vh - 100px);
   }
 }

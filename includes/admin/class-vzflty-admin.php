@@ -25,14 +25,30 @@ class VZFLTY_Admin {
 	const OPTION_GROUP = 'vzflty_settings';
 
 	/**
+	 * Cached options.
+	 *
+	 * @var array|null
+	 */
+	private $options = null;
+
+	/**
 	 * Available tabs.
 	 *
 	 * @var array
 	 */
 	private $tabs = array(
-		'general'  => 'general',
-		'whatsapp' => 'whatsapp',
-		'apointoo' => 'apointoo',
+		'general'  => array(
+			'slug'  => 'general',
+			'label' => 'general',
+		),
+		'whatsapp' => array(
+			'slug'  => 'whatsapp',
+			'label' => 'whatsapp',
+		),
+		'apointoo' => array(
+			'slug'  => 'apointoo',
+			'label' => 'apointoo',
+		),
 	);
 
 	/**
@@ -79,21 +95,18 @@ class VZFLTY_Admin {
 			return;
 		}
 
-		$options    = vzflty_get_options();
-		$active_tab = $this->get_active_tab();
+		$active_tab     = $this->get_active_tab();
+		$this->options  = vzflty_get_options();
+		$current_page   = $this->get_section_page_id( $active_tab );
+		$tab_definitions = $this->get_tab_definitions();
 		?>
 		<div class="wrap">
 			<h1><?php esc_html_e( 'Floaty Book Now Chat Settings', 'floaty-book-now-chat' ); ?></h1>
 			<h2 class="nav-tab-wrapper">
-				<?php foreach ( $this->tabs as $tab_key => $tab_slug ) : ?>
+				<?php foreach ( $tab_definitions as $tab_key => $tab_data ) : ?>
 					<?php
-					$tab_url = add_query_arg(
-						array(
-							'page' => self::PAGE_SLUG,
-							'tab'  => $tab_slug,
-						),
-						admin_url( 'options-general.php' )
-					);
+					$tab_url = $this->get_tab_url( $tab_data['slug'] );
+					$is_active = ( $active_tab === $tab_data['slug'] );
 					?>
 					<a href="<?php echo esc_url( $tab_url ); ?>" class="nav-tab<?php echo esc_attr( $active_tab === $tab_slug ? ' nav-tab-active' : '' ); ?>">
 						<?php
@@ -109,12 +122,12 @@ class VZFLTY_Admin {
 				<?php endforeach; ?>
 			</h2>
 
-			<?php $this->render_notices( $active_tab, $options ); ?>
+			<?php $this->render_notices( $active_tab ); ?>
 
 			<form action="options.php" method="post">
 				<?php
 				settings_fields( self::OPTION_GROUP );
-				do_settings_sections( $this->get_section_page_id( $active_tab ) );
+				do_settings_sections( $current_page );
 				submit_button();
 				?>
 			</form>
@@ -404,7 +417,7 @@ class VZFLTY_Admin {
 	 * @return void
 	 */
 	public function render_checkbox_field( $args ) {
-		$options = vzflty_get_options();
+		$options = $this->get_options();
 		$key     = $args['key'];
 		$value   = ! empty( $options[ $key ] );
 		?>
@@ -422,7 +435,7 @@ class VZFLTY_Admin {
 	 * @return void
 	 */
 	public function render_text_field( $args ) {
-		$options     = vzflty_get_options();
+		$options     = $this->get_options();
 		$key         = $args['key'];
 		$default     = $args['default'] ?? '';
 		$value       = isset( $options[ $key ] ) ? $options[ $key ] : $default;
@@ -443,7 +456,7 @@ class VZFLTY_Admin {
 	 * @return void
 	 */
 	public function render_select_field( $args ) {
-		$options = vzflty_get_options();
+		$options = $this->get_options();
 		$key     = $args['key'];
 		$choices = $args['options'] ?? array();
 		$default = $args['default'] ?? '';
@@ -465,7 +478,7 @@ class VZFLTY_Admin {
 	 * @return void
 	 */
 	public function render_textarea_field( $args ) {
-		$options     = vzflty_get_options();
+		$options     = $this->get_options();
 		$key         = $args['key'];
 		$default     = $args['default'] ?? '';
 		$value       = isset( $options[ $key ] ) ? $options[ $key ] : $default;
@@ -482,11 +495,12 @@ class VZFLTY_Admin {
 	 * Output contextual notices per tab.
 	 *
 	 * @param string $active_tab Active tab slug.
-	 * @param array  $options    Current options.
 	 *
 	 * @return void
 	 */
-	private function render_notices( $active_tab, $options ) {
+	private function render_notices( $active_tab ) {
+		$options = $this->get_options();
+
 		if ( 'general' === $active_tab ) {
 			$status_label = ! empty( $options['enabled'] ) ? __( 'Enabled', 'floaty-book-now-chat' ) : __( 'Disabled', 'floaty-book-now-chat' );
 			printf(
@@ -517,10 +531,9 @@ class VZFLTY_Admin {
 	 * @return string
 	 */
 	private function get_active_tab() {
-		$tab = filter_input( INPUT_GET, 'tab', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
-		$tab = $tab ? sanitize_key( $tab ) : 'general';
+		$tab = isset( $_GET['tab'] ) ? sanitize_key( wp_unslash( $_GET['tab'] ) ) : 'general'; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
-		return in_array( $tab, $this->tabs, true ) ? $tab : 'general';
+		return array_key_exists( $tab, $this->tabs ) ? $tab : 'general';
 	}
 
 	/**
@@ -531,9 +544,60 @@ class VZFLTY_Admin {
 	 * @return string
 	 */
 	private function get_section_page_id( $tab ) {
-		$allowed = $this->tabs;
-		$tab     = in_array( $tab, $allowed, true ) ? $tab : 'general';
+		$allowed_tab = array_key_exists( $tab, $this->tabs ) ? $tab : 'general';
 
-		return self::PAGE_SLUG . '-' . $tab;
+		return self::PAGE_SLUG . '-' . $allowed_tab;
+	}
+
+	/**
+	 * Build tab URL.
+	 *
+	 * @param string $slug Tab slug.
+	 *
+	 * @return string
+	 */
+	private function get_tab_url( $slug ) {
+		return add_query_arg(
+			array(
+				'page' => self::PAGE_SLUG,
+				'tab'  => $slug,
+			),
+			admin_url( 'options-general.php' )
+		);
+	}
+
+	/**
+	 * Get tab definitions with translated labels.
+	 *
+	 * @return array
+	 */
+	private function get_tab_definitions() {
+		return array(
+			'general'  => array(
+				'slug'  => 'general',
+				'label' => __( 'General', 'floaty-button' ),
+			),
+			'whatsapp' => array(
+				'slug'  => 'whatsapp',
+				'label' => __( 'WhatsApp', 'floaty-button' ),
+			),
+			'apointoo' => array(
+				'slug'  => 'apointoo',
+				'label' => __( 'Apointoo Booking', 'floaty-button' ),
+			),
+		);
+	}
+
+	/**
+	 * Get cached options.
+	 *
+	 * @return array
+	 */
+	private function get_options() {
+		if ( null === $this->options ) {
+			$this->options = vzflty_get_options();
+		}
+
+		return $this->options;
 	}
 }

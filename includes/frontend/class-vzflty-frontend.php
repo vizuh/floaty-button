@@ -47,7 +47,7 @@ class VZFLTY_Frontend {
 		$custom_css = isset( $options['custom_css'] ) ? trim( $options['custom_css'] ) : '';
 
 		if ( '' !== $custom_css ) {
-			$inline_css = "/* Scope your selectors with #floaty-button-container */\n" . wp_strip_all_tags( $custom_css );
+			$inline_css = "/* Scope your selectors with #vzflty-button-container */\n" . wp_strip_all_tags( $custom_css );
 			$inline_css = apply_filters( 'vzflty_inline_css', $inline_css, $options );
 			wp_add_inline_style( $style_handle, $inline_css );
 		}
@@ -65,19 +65,19 @@ class VZFLTY_Frontend {
 	 */
 	private function prepare_script_data( $options ) {
 		return array(
-			'buttonLabel'     => $options['button_label'],
-			'buttonTemplate'  => $options['button_template'],
-			'position'        => $options['position'],
-			'actionType'      => $options['action_type'],
-			'linkUrl'         => $options['link_url'],
-			'linkTarget'      => $options['link_target'],
-			'iframeUrl'       => $options['iframe_url'],
-			'eventName'       => $options['event_name'],
-			'whatsappPhone'   => $options['whatsapp_phone'],
-			'whatsappMessage' => $options['whatsapp_message'],
+			'buttonLabel'     => vzflty_get_option_value( $options, 'button_label', '' ),
+			'buttonTemplate'  => vzflty_get_option_value( $options, 'button_template', 'default' ),
+			'position'        => vzflty_get_option_value( $options, 'position', 'bottom_right' ),
+			'actionType'      => vzflty_get_option_value( $options, 'action_type', 'link' ),
+			'linkUrl'         => vzflty_get_option_value( $options, 'link_url', '' ),
+			'linkTarget'      => vzflty_get_option_value( $options, 'link_target', '_blank' ),
+			'iframeUrl'       => vzflty_get_option_value( $options, 'iframe_url', '' ),
+			'eventName'       => vzflty_get_option_value( $options, 'event_name', 'floaty_click' ),
+			'whatsappPhone'   => vzflty_get_option_value( $options, 'whatsapp_phone', '' ),
+			'whatsappMessage' => vzflty_get_option_value( $options, 'whatsapp_message', '' ),
 			'apointoo'        => array(
-				'enabled'    => (bool) $options['apointoo_enabled'],
-				'merchantId' => $options['apointoo_merchant_id'],
+				'enabled'    => (bool) vzflty_get_option_value( $options, 'apointoo_enabled', 0 ),
+				'merchantId' => vzflty_get_option_value( $options, 'apointoo_merchant_id', '' ),
 			),
 		);
 	}
@@ -94,8 +94,8 @@ class VZFLTY_Frontend {
 			return false;
 		}
 
-		$template            = $options['button_template'];
-		$action              = $options['action_type'];
+		$template           = isset( $options['button_template'] ) ? $options['button_template'] : 'default';
+		$action             = isset( $options['action_type'] ) ? $options['action_type'] : 'link';
 		$has_whatsapp_phone = ! empty( $options['whatsapp_phone'] );
 
 		if ( 'whatsapp' === $template ) {
