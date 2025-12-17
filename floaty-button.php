@@ -6,9 +6,9 @@
 		 * Version:     1.0.0
 		 * Author:      Vizuh
 		 * Author URI:  https://vizuh.com
-		 * Text Domain: floaty-button-main
+ * Text Domain: floaty-button
 		 * Requires at least: 6.4
-		 * Tested up to:      6.6
+ * Tested up to:      6.9
 		 * Requires PHP:      7.4
 		 * License:     GPLv2 or later
 		 * License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -22,19 +22,10 @@ class Floaty_Button_Plugin {
         const OPTION_KEY = 'floaty_button_options';
 
         public function __construct() {
-                add_action( 'plugins_loaded', array( $this, 'load_textdomain' ) );
                 add_action( 'admin_init', array( $this, 'register_settings' ) );
                 add_action( 'admin_menu', array( $this, 'add_settings_page' ) );
                 add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ), 20 );
                 }
-		
-			public function load_textdomain() {
-				load_plugin_textdomain(
-					'floaty-button-main',
-					false,
-					dirname( plugin_basename( __FILE__ ) ) . '/languages'
-				);
-			}
 		
 			public function register_settings() {
 				register_setting(
@@ -45,14 +36,14 @@ class Floaty_Button_Plugin {
 		
 				add_settings_section(
 					'floaty_button_main_section',
-					__( 'Main Settings', 'floaty-button-main' ),
+					__( 'Main Settings', 'floaty-button' ),
 					null,
 					'floaty-button-settings'
 				);
 		
 				add_settings_field(
 					'enabled',
-					__( 'Enable Plugin', 'floaty-button-main' ),
+					__( 'Enable Plugin', 'floaty-button' ),
 					array( $this, 'render_checkbox_field' ),
 					'floaty-button-settings',
 					'floaty_button_main_section',
@@ -61,15 +52,15 @@ class Floaty_Button_Plugin {
 		
 				add_settings_field(
 					'button_template',
-					__( 'Button Template', 'floaty-button-main' ),
+					__( 'Button Template', 'floaty-button' ),
 					array( $this, 'render_select_field' ),
 					'floaty-button-settings',
 					'floaty_button_main_section',
 					array(
 						'key'     => 'button_template',
 						'options' => array(
-							'default'  => __( 'Default Button', 'floaty-button-main' ),
-							'whatsapp' => __( 'WhatsApp Floating Button', 'floaty-button-main' ),
+							'default'  => __( 'Default Button', 'floaty-button' ),
+							'whatsapp' => __( 'WhatsApp Floating Button', 'floaty-button' ),
 						),
 						'default' => 'default',
 					)
@@ -77,7 +68,7 @@ class Floaty_Button_Plugin {
 		
 				add_settings_field(
 					'button_label',
-					__( 'Button Label', 'floaty-button-main' ),
+					__( 'Button Label', 'floaty-button' ),
 					array( $this, 'render_text_field' ),
 					'floaty-button-settings',
 					'floaty_button_main_section',
@@ -86,15 +77,15 @@ class Floaty_Button_Plugin {
 		
 				add_settings_field(
 					'position',
-					__( 'Button Position', 'floaty-button-main' ),
+					__( 'Button Position', 'floaty-button' ),
 					array( $this, 'render_select_field' ),
 					'floaty-button-settings',
 					'floaty_button_main_section',
 					array(
 						'key'     => 'position',
 						'options' => array(
-							'bottom_right' => __( 'Bottom Right', 'floaty-button-main' ),
-							'bottom_left'  => __( 'Bottom Left', 'floaty-button-main' ),
+							'bottom_right' => __( 'Bottom Right', 'floaty-button' ),
+							'bottom_left'  => __( 'Bottom Left', 'floaty-button' ),
 						),
 						'default' => 'bottom_right',
 					)
@@ -102,22 +93,22 @@ class Floaty_Button_Plugin {
 		
 				add_settings_field(
 					'action_type',
-					__( 'Action Type', 'floaty-button-main' ),
+					__( 'Action Type', 'floaty-button' ),
 					array( $this, 'render_select_field' ),
 					'floaty-button-settings',
 					'floaty_button_main_section',
 					array(
 						'key'     => 'action_type',
 						'options' => array(
-							'link'         => __( 'Open Link', 'floaty-button-main' ),
-							'iframe_modal' => __( 'Open Iframe Modal', 'floaty-button-main' ),
+							'link'         => __( 'Open Link', 'floaty-button' ),
+							'iframe_modal' => __( 'Open Iframe Modal', 'floaty-button' ),
 						),
 					)
 				);
 		
                         add_settings_field(
                                         'link_url',
-                                        __( 'Link URL', 'floaty-button-main' ),
+                                        __( 'Link URL', 'floaty-button' ),
                                         array( $this, 'render_text_field' ),
                                         'floaty-button-settings',
                                         'floaty_button_main_section',
@@ -126,22 +117,22 @@ class Floaty_Button_Plugin {
 
                                 add_settings_field(
                                         'link_target',
-                                        __( 'Link Target', 'floaty-button-main' ),
+                                        __( 'Link Target', 'floaty-button' ),
                                         array( $this, 'render_select_field' ),
                                         'floaty-button-settings',
                                         'floaty_button_main_section',
                                         array(
                                                 'key' => 'link_target',
                                                 'options' => array(
-                                                        '_blank' => __( 'New Tab (_blank)', 'floaty-button-main' ),
-                                                        '_self' => __( 'Same Tab (_self)', 'floaty-button-main' ),
+                                                        '_blank' => __( 'New Tab (_blank)', 'floaty-button' ),
+                                                        '_self' => __( 'Same Tab (_self)', 'floaty-button' ),
                                                 ),
                                         )
                                 );
 
                                 add_settings_field(
                                         'iframe_url',
-                                        __( 'Iframe URL', 'floaty-button-main' ),
+                                        __( 'Iframe URL', 'floaty-button' ),
                                         array( $this, 'render_text_field' ),
                                         'floaty-button-settings',
                                         'floaty_button_main_section',
@@ -150,7 +141,7 @@ class Floaty_Button_Plugin {
 
                                 add_settings_field(
                                         'event_name',
-                                        __( 'DataLayer Event Name', 'floaty-button-main' ),
+                                        __( 'DataLayer Event Name', 'floaty-button' ),
                                         array( $this, 'render_text_field' ),
                                         'floaty-button-settings',
                                         'floaty_button_main_section',
@@ -159,57 +150,57 @@ class Floaty_Button_Plugin {
 		
 		                add_settings_field(
 		                        'custom_css',
-					__( 'Custom CSS', 'floaty-button-main' ),
+					__( 'Custom CSS', 'floaty-button' ),
 					array( $this, 'render_textarea_field' ),
 		                        'floaty-button-settings',
 		                        'floaty_button_main_section',
 		                        array(
 		                                'key'         => 'custom_css',
-		                                'description' => __( 'Tip: Prefix your rules with #floaty-button-container to avoid theme conflicts.', 'floaty-button-main' ),
+		                                'description' => __( 'Tip: Prefix your rules with #floaty-button-container to avoid theme conflicts.', 'floaty-button' ),
 					)
 		                );
 		
 				add_settings_section(
 					'floaty_button_whatsapp_section',
-					__( 'WhatsApp Settings', 'floaty-button-main' ),
+					__( 'WhatsApp Settings', 'floaty-button' ),
 					null,
 					'floaty-button-settings'
 				);
 		
 				add_settings_field(
 					'whatsapp_phone',
-					__( 'WhatsApp Phone Number', 'floaty-button-main' ),
+					__( 'WhatsApp Phone Number', 'floaty-button' ),
 					array( $this, 'render_text_field' ),
 					'floaty-button-settings',
 					'floaty_button_whatsapp_section',
 					array(
 						'key'         => 'whatsapp_phone',
-						'description' => __( 'Enter your WhatsApp number in international format (digits only). Example: 5511999999999.', 'floaty-button-main' ),
+						'description' => __( 'Enter your WhatsApp number in international format (digits only). Example: 5511999999999.', 'floaty-button' ),
 					)
 				);
 		
 				add_settings_field(
 					'whatsapp_message',
-					__( 'Prefilled Message', 'floaty-button-main' ),
+					__( 'Prefilled Message', 'floaty-button' ),
 					array( $this, 'render_text_field' ),
 					'floaty-button-settings',
 					'floaty_button_whatsapp_section',
 					array(
 						'key'         => 'whatsapp_message',
-						'description' => __( 'Optional. Example: Hi, I\'d like to book an appointment.', 'floaty-button-main' ),
+						'description' => __( 'Optional. Example: Hi, I\'d like to book an appointment.', 'floaty-button' ),
 					)
 				);
 		
 				add_settings_section(
 					'floaty_button_google_reserve_section',
-					__( 'Google Reserve Integration', 'floaty-button-main' ),
+					__( 'Google Reserve Integration', 'floaty-button' ),
 					null,
 					'floaty-button-settings'
 				);
 		
 				add_settings_field(
 					'google_reserve_enabled',
-					__( 'Enable Google Reserve', 'floaty-button-main' ),
+					__( 'Enable Google Reserve', 'floaty-button' ),
 					array( $this, 'render_checkbox_field' ),
 					'floaty-button-settings',
 					'floaty_button_google_reserve_section',
@@ -218,13 +209,13 @@ class Floaty_Button_Plugin {
 		
 				add_settings_field(
 					'google_reserve_merchant_id',
-					__( 'Merchant ID', 'floaty-button-main' ),
+					__( 'Merchant ID', 'floaty-button' ),
 					array( $this, 'render_text_field' ),
 					'floaty-button-settings',
 					'floaty_button_google_reserve_section',
 					array(
 						'key'         => 'google_reserve_merchant_id',
-						'description' => __( 'Enter the Merchant ID provided by Appointo (e.g., <code>my-business-name-123</code>).', 'floaty-button-main' ),
+						'description' => __( 'Enter the Merchant ID provided by Appointo (e.g., <code>my-business-name-123</code>).', 'floaty-button' ),
 					)
 				);
                         }
@@ -243,7 +234,7 @@ class Floaty_Button_Plugin {
 
                 $output['enabled']         = ! empty( $input['enabled'] ) ? 1 : 0;
                 $output['button_template'] = in_array( $input['button_template'] ?? 'default', array( 'default', 'whatsapp' ), true ) ? $input['button_template'] : 'default';
-                $output['button_label']    = sanitize_text_field( $input['button_label'] ?? __( 'Book now', 'floaty-button-main' ) );
+                $output['button_label']    = sanitize_text_field( $input['button_label'] ?? __( 'Book now', 'floaty-button' ) );
                 $output['position']        = in_array(
                         $input['position'] ?? 'bottom_right',
                         array( 'bottom_right', 'bottom_left' ),
@@ -278,8 +269,8 @@ class Floaty_Button_Plugin {
 		
         public function add_settings_page() {
                 add_options_page(
-                        __( 'Floaty Button Settings', 'floaty-button-main' ),
-                        __( 'Floaty Button', 'floaty-button-main' ),
+                        __( 'Floaty Button Settings', 'floaty-button' ),
+                        __( 'Floaty Button', 'floaty-button' ),
                         'manage_options',
                         'floaty-button-settings',
                         array( $this, 'render_settings_page' )
@@ -292,7 +283,7 @@ class Floaty_Button_Plugin {
                 }
                 ?>
                 <div class="wrap">
-                        <h1><?php esc_html_e( 'Floaty Button Settings', 'floaty-button-main' ); ?></h1>
+                        <h1><?php esc_html_e( 'Floaty Button Settings', 'floaty-button' ); ?></h1>
                         <form action="options.php" method="post">
                                 <?php
                                 settings_fields( 'floaty_button_settings' );
@@ -412,7 +403,7 @@ return;
 		}
 		
                                 $config = array(
-                                        'buttonLabel'     => $options['button_label'] ?? __( 'Book now', 'floaty-button-main' ),
+                                        'buttonLabel'     => $options['button_label'] ?? __( 'Book now', 'floaty-button' ),
 					'buttonTemplate'  => $options['button_template'] ?? 'default',
 					'position'        => $options['position'] ?? 'bottom_right',
 					'actionType'      => $options['action_type'] ?? 'link',
