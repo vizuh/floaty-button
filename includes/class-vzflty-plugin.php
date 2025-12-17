@@ -35,9 +35,9 @@ class VZFLTY_Plugin {
 	 */
 	public function init() {
 		load_plugin_textdomain(
-			'floaty-button',
+			'floaty-book-now-chat',
 			false,
-			dirname( plugin_basename( VZFLTY_PLUGIN_FILE ) ) . '/languages/'
+			dirname( plugin_basename( VZFLTY_PLUGIN_FILE ) ) . '/languages'
 		);
 
 		$this->frontend = new VZFLTY_Frontend();

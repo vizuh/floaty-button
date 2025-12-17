@@ -575,15 +575,15 @@ class VZFLTY_Admin {
 		return array(
 			'general'  => array(
 				'slug'  => 'general',
-				'label' => __( 'General', 'floaty-button' ),
+				'label' => __( 'General', 'floaty-book-now-chat' ),
 			),
 			'whatsapp' => array(
 				'slug'  => 'whatsapp',
-				'label' => __( 'WhatsApp', 'floaty-button' ),
+				'label' => __( 'WhatsApp', 'floaty-book-now-chat' ),
 			),
 			'apointoo' => array(
 				'slug'  => 'apointoo',
-				'label' => __( 'Apointoo Booking', 'floaty-button' ),
+				'label' => __( 'Apointoo Booking', 'floaty-book-now-chat' ),
 			),
 		);
 	}

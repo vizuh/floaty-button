@@ -7,6 +7,7 @@
  * Author:      Vizuh
  * Author URI:  https://vizuh.com
  * Text Domain: floaty-book-now-chat
+ * Domain Path: /languages
  * Requires at least: 6.4
  * Tested up to: 6.9
  * Requires PHP: 7.4
