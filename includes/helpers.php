@@ -17,6 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 function vzflty_get_default_options() {
 	return array(
 		'enabled'               => 0,
+		'mode'                  => 'custom',
 		'button_template'       => 'default',
 		'button_label'          => __( 'Book now', 'floaty-book-now-chat' ),
 		'position'              => 'bottom_right',
@@ -24,7 +25,7 @@ function vzflty_get_default_options() {
 		'link_url'              => '',
 		'link_target'           => '_blank',
 		'iframe_url'            => '',
-		'event_name'            => 'floaty_click',
+		'event_name'            => 'vzflty_click',
 		'custom_css'            => '',
 		'whatsapp_phone'        => '',
 		'whatsapp_message'      => '',
