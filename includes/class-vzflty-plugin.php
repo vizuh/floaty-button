@@ -34,12 +34,6 @@ class VZFLTY_Plugin {
 	 * @return void
 	 */
 	public function init() {
-		load_plugin_textdomain(
-			'floaty-book-now-chat',
-			false,
-			dirname( plugin_basename( VZFLTY_PLUGIN_FILE ) ) . '/languages'
-		);
-
 		$this->frontend = new VZFLTY_Frontend();
 		add_action( 'wp_enqueue_scripts', array( $this->frontend, 'enqueue_assets' ) );
 

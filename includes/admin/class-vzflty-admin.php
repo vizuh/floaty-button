@@ -477,6 +477,7 @@ class VZFLTY_Admin {
 			'<p class="description">%s</p>',
 			wp_kses(
 				sprintf(
+					/* translators: %s: mailto link for requesting an Apointoo Merchant ID. */
 					__( 'To get your Apointoo Merchant ID, email %s', 'floaty-book-now-chat' ),
 					$mailto_label
 				),
