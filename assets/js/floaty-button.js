@@ -14,7 +14,8 @@
 	}
 
 	const positionClass = settings.position ? `vzflty-position-${ settings.position }` : 'vzflty-position-bottom_right';
-	const isWhatsApp = settings.buttonTemplate === 'whatsapp';
+	const buttonMode = settings.mode === 'whatsapp' ? 'whatsapp' : ( settings.buttonTemplate === 'whatsapp' ? 'whatsapp' : 'custom' );
+	const isWhatsApp = buttonMode === 'whatsapp';
 	const buttonLabel = settings.buttonLabel || ( isWhatsApp ? 'WhatsApp' : 'Book now' );
 
 	if ( isWhatsApp ) {
@@ -47,7 +48,7 @@
 	function pushToDataLayer() {
 		window.dataLayer = window.dataLayer || [];
 		window.dataLayer.push( {
-			event: settings.eventName || 'floaty_click',
+			event: settings.eventName || 'vzflty_click',
 			floatyActionType: isWhatsApp ? 'whatsapp' : ( settings.actionType || 'link' ),
 			floatyLabel: buttonLabel,
 		} );

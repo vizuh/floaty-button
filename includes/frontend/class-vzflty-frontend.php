@@ -64,15 +64,18 @@ class VZFLTY_Frontend {
 	 * @return array
 	 */
 	private function prepare_script_data( $options ) {
+		$mode = $this->resolve_mode( $options );
+
 		return array(
 			'buttonLabel'     => vzflty_get_option_value( $options, 'button_label', '' ),
-			'buttonTemplate'  => vzflty_get_option_value( $options, 'button_template', 'default' ),
+			'buttonTemplate'  => ( 'whatsapp' === $mode ) ? 'whatsapp' : 'default',
+			'mode'            => $mode,
 			'position'        => vzflty_get_option_value( $options, 'position', 'bottom_right' ),
 			'actionType'      => vzflty_get_option_value( $options, 'action_type', 'link' ),
 			'linkUrl'         => vzflty_get_option_value( $options, 'link_url', '' ),
 			'linkTarget'      => vzflty_get_option_value( $options, 'link_target', '_blank' ),
 			'iframeUrl'       => vzflty_get_option_value( $options, 'iframe_url', '' ),
-			'eventName'       => vzflty_get_option_value( $options, 'event_name', 'floaty_click' ),
+			'eventName'       => vzflty_get_option_value( $options, 'event_name', 'vzflty_click' ),
 			'whatsappPhone'   => vzflty_get_option_value( $options, 'whatsapp_phone', '' ),
 			'whatsappMessage' => vzflty_get_option_value( $options, 'whatsapp_message', '' ),
 			'apointoo'        => array(
@@ -94,11 +97,11 @@ class VZFLTY_Frontend {
 			return false;
 		}
 
-		$template           = isset( $options['button_template'] ) ? $options['button_template'] : 'default';
+		$mode               = $this->resolve_mode( $options );
 		$action             = isset( $options['action_type'] ) ? $options['action_type'] : 'link';
 		$has_whatsapp_phone = ! empty( $options['whatsapp_phone'] );
 
-		if ( 'whatsapp' === $template ) {
+		if ( 'whatsapp' === $mode ) {
 			return $has_whatsapp_phone;
 		}
 
@@ -111,5 +114,30 @@ class VZFLTY_Frontend {
 		}
 
 		return true;
+	}
+
+	/**
+	 * Resolve mode with backward compatibility.
+	 *
+	 * @param array $options Saved options.
+	 *
+	 * @return string
+	 */
+	private function resolve_mode( $options ) {
+		$mode = isset( $options['mode'] ) ? $options['mode'] : '';
+
+		if ( 'whatsapp' === $mode ) {
+			return 'whatsapp';
+		}
+
+		if ( 'custom' === $mode ) {
+			return 'custom';
+		}
+
+		if ( isset( $options['button_template'] ) && 'whatsapp' === $options['button_template'] ) {
+			return 'whatsapp';
+		}
+
+		return 'custom';
 	}
 }
