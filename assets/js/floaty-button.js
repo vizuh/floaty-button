@@ -1,6 +1,6 @@
 (function () {
-    if (!window.FLOATY_BUTTON_SETTINGS) return;
-    const settings = window.FLOATY_BUTTON_SETTINGS;
+    if (!window.VZFLTY_SETTINGS) return;
+    const settings = window.VZFLTY_SETTINGS;
 
     const containerID = 'floaty-button-container';
     let container = document.getElementById(containerID);
@@ -103,10 +103,10 @@
     if (closeBtn) closeBtn.addEventListener('click', closeModal);
 
     // Expose optional global helpers
-    window.FLOATY_showButton = function () {
+    window.VZFLTY_showButton = function () {
         if (button) button.style.display = '';
     };
-    window.FLOATY_hideButton = function () {
+    window.VZFLTY_hideButton = function () {
         if (button) button.style.display = 'none';
     };
 })();
