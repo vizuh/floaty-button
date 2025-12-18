@@ -82,6 +82,12 @@ class VZFLTY_Frontend {
 				'enabled'    => (bool) vzflty_get_option_value( $options, 'apointoo_enabled', 0 ),
 				'merchantId' => vzflty_get_option_value( $options, 'apointoo_merchant_id', '' ),
 			),
+			'i18n'            => array(
+				'defaultButtonLabel' => __( 'Book now', 'floaty-book-now-chat' ),
+				'whatsappLabel'      => __( 'WhatsApp', 'floaty-book-now-chat' ),
+				'modalCloseLabel'    => __( 'Close', 'floaty-book-now-chat' ),
+				'modalCloseText'     => __( 'Close', 'floaty-book-now-chat' ),
+			),
 		);
 	}
 

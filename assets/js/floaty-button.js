@@ -5,6 +5,11 @@
 
 	const settings = window.VZFLTY_SETTINGS;
 	const containerID = 'vzflty-button-container';
+	const i18n = settings.i18n || {};
+	const whatsappLabel = i18n.whatsappLabel || 'WhatsApp';
+	const defaultButtonLabel = i18n.defaultButtonLabel || 'Book now';
+	const modalCloseLabel = i18n.modalCloseLabel || 'Close';
+	const modalCloseText = i18n.modalCloseText || 'Close';
 	let container = document.getElementById( containerID );
 
 	if ( ! container ) {
@@ -16,7 +21,7 @@
 	const positionClass = settings.position ? `vzflty-position-${ settings.position }` : 'vzflty-position-bottom_right';
 	const buttonMode = settings.mode === 'whatsapp' ? 'whatsapp' : ( settings.buttonTemplate === 'whatsapp' ? 'whatsapp' : 'custom' );
 	const isWhatsApp = buttonMode === 'whatsapp';
-	const buttonLabel = settings.buttonLabel || ( isWhatsApp ? 'WhatsApp' : 'Book now' );
+	const buttonLabel = settings.buttonLabel || ( isWhatsApp ? whatsappLabel : defaultButtonLabel );
 
 	if ( isWhatsApp ) {
 		container.innerHTML = `
@@ -33,7 +38,7 @@
 			</button>
 			<div class="vzflty-modal-backdrop" hidden></div>
 			<div class="vzflty-modal" hidden>
-				<button class="vzflty-modal-close" type="button" aria-label="Close">&times;</button>
+				<button class="vzflty-modal-close" type="button" aria-label="${ modalCloseLabel }" title="${ modalCloseLabel }">${ modalCloseText }</button>
 				<iframe class="vzflty-modal-iframe" src="" frameborder="0"></iframe>
 			</div>
 		`;
