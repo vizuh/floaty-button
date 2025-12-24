@@ -1,6 +1,6 @@
-=== Floaty – Book Now & Chat Button ===
+=== Floaty Book Now Chat ===
 Contributors: vizuh, hugoc, atroci, andreluizsr90
-Tags: booking, appointments, whatsapp, chat, floating button, cta, modal
+Tags: booking, appointments, whatsapp, chat, modal
 Requires at least: 6.4
 Tested up to: 6.9
 Requires PHP: 7.4

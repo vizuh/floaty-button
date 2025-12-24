@@ -34,8 +34,6 @@ class VZFLTY_Plugin {
 	 * @return void
 	 */
 	public function init() {
-		add_action( 'init', array( $this, 'load_textdomain' ) );
-
 		$this->frontend = new VZFLTY_Frontend();
 		add_action( 'wp_enqueue_scripts', array( $this->frontend, 'enqueue_assets' ) );
 
@@ -46,15 +44,6 @@ class VZFLTY_Plugin {
 		}
 
 		add_filter( 'plugin_action_links_' . plugin_basename( VZFLTY_PLUGIN_FILE ), array( $this, 'add_settings_link' ) );
-	}
-
-	/**
-	 * Load the plugin text domain for translations.
-	 *
-	 * @return void
-	 */
-	public function load_textdomain() {
-		load_plugin_textdomain( 'floaty-book-now-chat', false, dirname( plugin_basename( VZFLTY_PLUGIN_FILE ) ) . '/languages' );
 	}
 
 	/**
