@@ -58,7 +58,7 @@ class VZFLTY_Frontend {
 		if ( '' !== $custom_css ) {
 			$inline_css = "/* Scope your selectors with #vzflty-button-container */\n" . wp_strip_all_tags( $custom_css );
 			$inline_css = apply_filters( 'vzflty_inline_css', $inline_css, $options );
-			wp_add_inline_style( $style_handle, $inline_css );
+			wp_add_inline_style( $style_handle, wp_strip_all_tags( $inline_css ) );
 		}
 
 		$script_data = $this->prepare_script_data( $options );
