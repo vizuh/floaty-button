@@ -35,45 +35,45 @@ class VZFLTY_Zoho_Integration implements VZFLTY_Integration {
 	public function send( $lead_data ) {
 		$options = vzflty_get_options();
 		
-		// 1. Get Zoho Settings.
-		// Note: The user mentioned "Action URL" and specific hidden fields in their provided snippet.
-		// We should allow storing these in options.
-		// For MVP, we will look for 'zoho_action_url' and map basic fields.
-		
 		$action_url = vzflty_get_option_value( $options, 'zoho_action_url', '' );
 		if ( empty( $action_url ) ) {
 			return new WP_Error( 'missing_config', 'Zoho Action URL not configured.' );
 		}
 
-		// 2. Prepare Payload.
-		// Standard mapping based on Zoho's default Web-to-Lead fields.
-		// In a real enterprise version, we'd have a mapping UI.
+		// Prepare Payload
 		$payload = array(
-			'Last Name' => $lead_data['lead_name'], // Zoho requires Last Name.
+			// Standard Zoho Fields
+			'Last Name' => $lead_data['lead_name'], 
 			'Email'     => $lead_data['lead_email'],
 			'Mobile'    => $lead_data['lead_phone'],
-			'Lead Source' => 'Floaty Button',
+			'Lead Source' => 'Site', // Hardcoded as per requirement request or mapping
+			
+			// Custom Enterprise Fields
+			'LEADCF16'  => isset( $lead_data['wpp_number'] ) ? $lead_data['wpp_number'] : '', // Vendedor / WhatsApp Number
+			'LEADCF17'  => isset( $lead_data['source_url'] ) ? $lead_data['source_url'] : '', // Auditoria / Ref URL
 		);
 
-		// Add custom hidden fields if any (from options).
-		// Example: xnQsjsdp, xmIwtLD (these are Zoho specific security tokens).
-		// Ideally, these should be settings fields.
-		// For now, let's assume valid tokens are part of the configuration or we can parse them? 
-		// Actually, Zoho Web-to-Lead relies heavily on these hidden input tokens. 
-		// If we do a server-side POST, we need to send EXACTLY what the form expects.
-		
-		// Enterprise Approach: User pastes their "Embed Code" or we provide fields for "Action URL", "xnQsjsdp", etc.
-		// Let's assume we add these to settings later. For now, I'll attempt a generic POST.
-		
+		// Handle Click IDs / Audit info if needed in LEADCF17 or Description
+		// If click_ids exist, append them?
+		if ( ! empty( $lead_data['click_ids'] ) ) {
+			// Append click IDs to Ref URL field or separate notes? 
+			// Let's append to LEADCF17 for redundancy or put in Description if mapped.
+			// Ideally we don't pollute the ref URL. Let's stick to source_url for LEADCF17 as requested "Ref_URL".
+		}
+
+		// Security Tokens (Hidden Fields)
 		$zoho_tokens = array(
-			'xnQsjsdp' => vzflty_get_option_value( $options, 'zoho_xnQsjsdp', '' ),
-			'xmIwtLD'  => vzflty_get_option_value( $options, 'zoho_xmIwtLD', '' ),
+			'xnQsjsdp'   => vzflty_get_option_value( $options, 'zoho_xnQsjsdp', '' ),
+			'xmIwtLD'    => vzflty_get_option_value( $options, 'zoho_xmIwtLD', '' ),
 			'actionType' => 'TGVhZHM=',
+			'returnURL'  => isset( $lead_data['source_url'] ) ? $lead_data['source_url'] : home_url(), 
 		);
 
 		$body = array_merge( $payload, $zoho_tokens );
 
-		// 3. Send Request.
+		// Send Request
+		// Note: Zoho Web-to-Lead expects a form POST (application/x-www-form-urlencoded), not JSON.
+		// wp_remote_post defaults to this if body is an array.
 		$response = wp_remote_post( $action_url, array(
 			'body'      => $body,
 			'timeout'   => 15,
@@ -86,11 +86,7 @@ class VZFLTY_Zoho_Integration implements VZFLTY_Integration {
 
 		$code = wp_remote_retrieve_response_code( $response );
 
-		// Zoho redirects on success, so 302/200 are usually okay. 
-		// However, pure API might behave differently than form post.
-		// Web-to-Lead is designed for browser POSTs (redirects user).
-		// Server-to-server POST to Web-to-Lead endpoint works but returns HTML.
-		
+		// Zoho redirects (302) on success.
 		if ( $code >= 200 && $code < 400 ) {
 			return true;
 		}

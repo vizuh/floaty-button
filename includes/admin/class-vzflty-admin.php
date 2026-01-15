@@ -281,6 +281,7 @@ class VZFLTY_Admin {
 			$output['whatsapp_phone'] = preg_replace( '/[^0-9]/', '', $input['whatsapp_phone'] );
 		}
 
+		if ( array_key_exists( 'whatsapp_message', $input ) ) {
 			$output['whatsapp_message'] = sanitize_text_field( $input['whatsapp_message'] );
 		}
 
@@ -350,6 +351,7 @@ class VZFLTY_Admin {
 		if ( array_key_exists( 'zoho_xnQsjsdp', $input ) ) {
 			$output['zoho_xnQsjsdp'] = sanitize_text_field( $input['zoho_xnQsjsdp'] );
 		}
+		if ( array_key_exists( 'zoho_xmIwtLD', $input ) ) {
 			$output['zoho_xmIwtLD'] = sanitize_text_field( $input['zoho_xmIwtLD'] );
 		}
 
@@ -561,7 +563,7 @@ class VZFLTY_Admin {
 				'description' => __( 'Optional message shown when the chat opens.', 'floaty-book-now-chat' ),
 			)
 		);
-		);
+
 		
 		add_settings_field(
 			'whatsapp_rr_numbers',

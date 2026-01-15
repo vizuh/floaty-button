@@ -55,6 +55,7 @@ class VZFLTY_DB {
 
 		$charset_collate = $wpdb->get_charset_collate();
 
+		$sql_leads = "CREATE TABLE {$this->leads_table} (
 			id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
 			lead_name varchar(255) NOT NULL,
 			lead_email varchar(255) DEFAULT '',

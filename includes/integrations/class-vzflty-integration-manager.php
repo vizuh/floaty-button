@@ -32,9 +32,7 @@ class VZFLTY_Integration_Manager {
 	 * Register available integrations.
 	 */
 	private function register_integrations() {
-		// $this->integrations['zoho'] = new VZFLTY_Zoho_Integration(); 
-		// Note: Zoho is handled separately via settings in basic version, 
-		// but ideally belongs here. For now we focus on the new Webhook.
+		$this->integrations['zoho'] = new VZFLTY_Zoho_Integration();
 	}
 
 	/**
@@ -48,6 +46,14 @@ class VZFLTY_Integration_Manager {
 	public function dispatch_lead( $lead_id, $data ) {
 		$options = vzflty_get_options();
 		
+		// Zoho
+		if ( ! empty( $options['zoho_enabled'] ) ) {
+			// We can dispatch directly or wrap in try/catch
+			if ( isset( $this->integrations['zoho'] ) ) {
+				$this->integrations['zoho']->send( $data );
+			}
+		}
+
 		// Generic Webhook
 		if ( ! empty( $options['integration_enabled'] ) && ! empty( $options['integration_webhook_url'] ) ) {
 			$this->send_webhook( $lead_id, $data, $options['integration_webhook_url'] );
